@@ -4,9 +4,7 @@ import { View, Text, StyleSheet, Dimensions, TextInput, Button } from 'react-nat
 import { androidCameraPermission } from '../../utils/permissions';
 import { mediaDevices, RTCView } from 'react-native-webrtc'
 import { sharedInitLocalVideo } from '../../utils/sharedActions';
-// import Peer from 'react-native-peerjs';
-import { Peer } from 'peerjs'
-
+import Peer from 'react-native-peerjs';
 
 
 
@@ -41,15 +39,18 @@ const Camera = () => {
         },
         facingMode: 'user',
     }
-    const inputRef = React.useRef();
-
-
 
     const call = (partnerId) => {
 
         mediaDevices.getUserMedia({ video: true, audio: true }).then(localStream => {
             // setLocalStream(localStream);
             const call = peer.call(inputRef.current, localStream);
+            // console.log('call..', call);
+
+            // call.on('stream', function (remoteStream) {
+            //     console.log('[call.on(stream)]. remoteStream', remoteStream);
+            //     setRemoteStream(remoteStream)
+            // })  
         }).catch(err => {
             console.log('Failed to get local stream', err);
         })
@@ -69,27 +70,39 @@ const Camera = () => {
         });
 
 
-        const remotePeer = new Peer();
-
-        // const conn = remotePeer.connect(inputRef.current);
-        console.log("conn", remotePeer.connect());
-
-        peer.on('call', (call) => {
-            console.log('[peer.on.call] Ran...',);
+        // peer.on('connection', function (dataConnection) {
+        //     console.log('My peer Data Connection: ' + dataConnection);
+        //     dataConnection.on('data', function (data) {
+        //         // Will print 'hi! Greeting from ${parnterPeerId}'
+        //         console.log('Data from peer connection ->', data);
+        //     });
+        // });
+        peer.on('call',  (call) =>{
+            console.log('[peer.on.call] Ran...', );
             mediaDevices.getUserMedia({ video: true, audio: true }).then(localStream => {
                 console.log('[peer.on.call]', localStream);
-
+                // setLocalStream(localStream);
+                // call.answer(localStream);
+                // call.on('stream', function (remoteStream) {
+                //     // console.log('[peer.on.call].stream', remoteStream, JSON.stringify(remoteStream));
+                //     setRemoteStream(remoteStream)
+                // })
             }).catch(err => {
                 console.log('Failed to get local stream', err);
             })
         });
-
+        // peer.on('close', function () {
+        //     console.log('My peer connection closed');
+        // });
+        // peer.on('disconnected', function () {
+        //     console.log('My peer disconnected');
+        // });
         peer.on('error', function (err) { console.log('An error accured in peer connection', err) })
     }, []);
 
     console.log("localStream=>>", localStream.toURL());
     console.log("remoteStream=>>", remoteStream.toURL());
-
+    const inputRef = React.useRef();
     return (
         <View style={styles.container}>
             <TextInput placeholder='partnerID' placeholderTextColor={"black"}
