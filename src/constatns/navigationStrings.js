@@ -10,4 +10,6 @@ export default {
     PHONE_NUMBER:"phoneNumber",
     EDIT_PROFILE:"editProfile",
     USERS:"users",
+    SENDER:"Sender",
+
 }

@@ -32,7 +32,6 @@ const EditProfile = ({ navigation, route }) => {
     const updateState = (data) => setState((state) => ({ ...state, ...data }))
 
 
-    console.log("datadata", data)
 
     const leftCustomView = () => {
         return (
@@ -53,7 +52,6 @@ const EditProfile = ({ navigation, route }) => {
                 cropping: true,
                 mediaType:'video'
             }).then(res => {
-                console.log(res);
                 updateState({ image: res.path })
             });
         }
@@ -66,7 +64,6 @@ const EditProfile = ({ navigation, route }) => {
         }
         try {
             const res = await actions.signUp(apiData)
-            console.log("api res signup", res)
             if (!!res?.data) {
                 navigation.navigate(navigationStrings.OTP_VERIFICATION, { data: res?.data })
             }

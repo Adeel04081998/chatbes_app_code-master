@@ -4,6 +4,9 @@ export {default as Calls} from './Calls/Calls';
 export {default as Camera} from './Camera/Camera';
 export {default as Chats} from './Chats/Chats';
 export {default as Settings} from './Settings/Settings';
+export {default as Sender} from './Sender/Sender';
+
+
 
 
 //Auth Screen

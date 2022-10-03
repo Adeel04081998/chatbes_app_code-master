@@ -11,7 +11,8 @@ import strings from '../../constatns/lang';
 import navigationStrings from '../../constatns/navigationStrings';
 import actions from '../../reudx/actions';
 import colors from '../../styles/colors';
-import { sharedUniqueKeyGenerator } from '../../utils/sharedActions';
+import { getCallStream, sharedUniqueKeyGenerator } from '../../utils/sharedActions';
+import socketServcies from '../../utils/socketService';
 import styles from './styles';
 
 
@@ -27,7 +28,6 @@ const Users = ({ navigation }) => {
     const fetchData = async () => {
         try {
             const res = await actions.fetchUsers()
-            console.log("res fetch users", res)
             if (!!res?.data) {
                 setData(res.data.users)
             }
@@ -55,10 +55,22 @@ const Users = ({ navigation }) => {
                     size={40}
                 />
                 <Text style={styles.userName}>{item?.name}</Text>
+                <Text style={{ fontWeight: 'bold', marginHorizontal: 10, color: 'black' }}>{item?.peerID}</Text>
                 {
                     iconsData.map((x, i) => {
                         return (
-                            <TouchableOpacity onPress={() => { navigation.navigate(x.navigationPath, {}) }} key={sharedUniqueKeyGenerator()}>
+                            <TouchableOpacity onPress={() => {
+                                socketServcies.emit('call_config', {
+                                    callingMode: x
+                                })
+                                navigation.navigate(x.navigationPath, {
+                                    item: item,
+                                    // actionType: x.name,
+                                    // isVideo:x.name === 'videoC'
+                                    callingMode: x.CallingMode
+
+                                })
+                            }} key={sharedUniqueKeyGenerator()}>
                                 <Image source={x.icon} style={{ height: 30, width: 30, tintColor: colors.blue }} />
                             </TouchableOpacity>
                         )
@@ -89,7 +101,6 @@ const Users = ({ navigation }) => {
             </View>
         )
     }, [data])
-
     return (
         <WrapperContainer
             containerStyle={{ paddingHorizontal: 0 }}
@@ -102,15 +113,7 @@ const Users = ({ navigation }) => {
                 rightTextStyle={{ color: colors.lightBlue }}
                 onPressRight={onPressRight}
             />
-            <TouchableOpacity onPress={() => {
 
-                navigation.navigate(navigationStrings.CAMERA, {})
-
-            }} key={sharedUniqueKeyGenerator()}
-                style={{ height: 50, width: '50%', left: 60 ,top:20,backgroundColor:'red'}}
-            >
-                <Text>Press</Text>
-            </TouchableOpacity>
 
             <FlatList
                 data={data}

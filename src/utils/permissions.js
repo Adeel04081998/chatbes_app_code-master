@@ -10,7 +10,6 @@ export const androidCameraPermission = () =>
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         ]);
-        console.log(granted, 'the granted value');
 
         if (
           granted['android.permission.CAMERA'] !== 'granted' ||

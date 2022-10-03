@@ -9,17 +9,21 @@ import { useSelector } from 'react-redux';
 const Stack = createNativeStackNavigator();
 
 function Routes() {
-  const userData = useSelector(state=> state.auth)
+  const userData = useSelector(state => state.auth)
 
-  console.log("reducer all values",userData)
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown:false}}>
-        {!!userData?.userData?._id?<>{MainStack(Stack)}</>:<>{AuthStack(Stack)}</>}
 
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <Stack.Navigator screenOptions={{ headerShown: false }}>
+    //     {!!userData?.userData?._id ? <>{MainStack(Stack)}</> : <>{AuthStack(Stack)}</>}
+
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    {!!userData?.userData?._id ? <>{MainStack(Stack)}</> : <>{AuthStack(Stack)}</>}
+
+  </Stack.Navigator>
   );
 }
 

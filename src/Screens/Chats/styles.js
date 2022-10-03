@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     headingSyle: {
         fontSize: textScale(26),
         fontFamily:fontFamily.bold,
+        color:'black',
     }
     
 })

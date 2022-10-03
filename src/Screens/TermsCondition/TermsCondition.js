@@ -8,7 +8,7 @@ import navigationStrings from '../../constatns/navigationStrings';
 import colors from '../../styles/colors';
 import styles from './styles';
 
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const TermsCondition = ({ navigation }) => {
     return (
@@ -18,9 +18,13 @@ const TermsCondition = ({ navigation }) => {
             <Text style={styles.descStyle}>{strings.READ_OUR} <Text style={{ color: colors.lightBlue }}>{strings.PRIVACY_POLICY}</Text> {strings.TAP_AGREE_AND_CONTINUE_TO_CEEPT_THE} <Text style={{ color: colors.lightBlue }}>{strings.TERMS_OF_SERVICE}
             </Text></Text>
 
-            <TouchableOpacity onPress={() => navigation.navigate(navigationStrings.USERS)} activeOpacity={0.7}>
+            <TouchableOpacity onPress={() => navigation.navigate(navigationStrings.PHONE_NUMBER)} activeOpacity={0.7}>
                 <Text style={styles.agreeStyle}>{strings.AGREE_AND_CONTINUE}</Text>
             </TouchableOpacity>
+
+
+            <Icon name="rocket" size={30} color="#900" />
+
         </WrapperContainer>
 
 

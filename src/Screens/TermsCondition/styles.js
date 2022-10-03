@@ -20,13 +20,15 @@ const styles = StyleSheet.create({
     headingStyle: {
         fontSize: textScale(32),
         fontFamily: fontFamily.bold,
-        alignSelf:'center'
+        alignSelf:'center',
+        color:'black'
     },
     descStyle: {
         fontSize: textScale(16),
         fontFamily: fontFamily.regular,
         textAlign: 'center',
-        marginTop: moderateScaleVertical(16)
+        marginTop: moderateScaleVertical(16),
+        color:'black'
     },
     agreeStyle: {
         fontSize: textScale(20),

@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
         height: moderateScale(42),
         width:moderateScale(42),
         borderBottomWidth: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        color:'black'
     }
     
 })

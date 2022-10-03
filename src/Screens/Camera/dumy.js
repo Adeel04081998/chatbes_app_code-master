@@ -1,137 +1,150 @@
 // //import liraries
-// import React, { Component, useEffect, useState } from 'react';
-// import { View, Text, StyleSheet, Dimensions, TextInput, Button } from 'react-native';
-// import { androidCameraPermission } from '../../utils/permissions';
+// import React, { useEffect, useRef, useState } from 'react';
+// import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Alert, Platform } from 'react-native';
 // import { mediaDevices, RTCView } from 'react-native-webrtc'
-// import { sharedInitLocalVideo } from '../../utils/sharedActions';
-// import Peer from 'react-native-peerjs';
-
-
+// import PeerServices from '../../utils/peerService';
+// import { ImagesData } from '../../config/ImagesData';
+// import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// import { getCallStream, sharedDisconnectCall, sharedInitialzeConnections } from '../../utils/sharedActions';
+// import navigationStrings from '../../constatns/navigationStrings';
+// import socketServcies from '../../utils/socketService';
+// import { CommonActions, StackActions } from '@react-navigation/native';
 
 // const { width, height } = Dimensions.get('screen');
 
-// // const peer = new Peer();
-
-// const peer = new Peer(undefined, {
-//     secure: false,
-//     host: '192.168.100.34',
-//     port: 9181,
-//     path: '/peer-server',
-//     debug: true
-// });
-
-// console.log('peer conection', peer);
-
 // // create a component
-// const Camera = () => {
+// const Camera = ({ navigation, route }) => {
+
+//     const USER = route?.params?.item?.name ?? '';
 //     const REMOTE_HEIGHT = height * .7;
 //     const Top = REMOTE_HEIGHT * 0.2;
-
+//     const hostId = route?.params?.item?.peerID ?? ''
 //     const [localStream, setLocalStream] = useState({ toURL: () => null });
 //     const [remoteStream, setRemoteStream] = useState({ toURL: () => null });
-//     const [peerID, setpeerID] = useState('');
+//     const [name, setName] = useState(hostId)
+//     const callObj = React.useRef(null)
 
-//     const videoCallData = {
-//         mandatory: {
-//             width: 640,
-//             height: 480,
-//             minFrameRate: 30,
-//         },
-//         facingMode: 'user',
+//     const callStream = route?.params?.callStreaming ?? '';
+//     const isVideoCallingMode = route?.params?.callingMode === 1 ? true : false
+//     console.log('navigation', navigation);
+
+//     const closeCall = () => {
+//         console.log('callObj.current', callObj.current);
+//         if (callStream.close) {
+//             callStream.close();
+//         } else if (callObj.current) {
+//             callObj.current.close()
+//         }
+//         setLocalStream(null);
+//         setRemoteStream(null);
+//         // navigation.navigate(navigationStrings.CHATS);
+//         navigation.reset({
+//             index: 0,
+//             routes: [{ name: navigationStrings.CHATS }]
+//        })
+
 //     }
-
-//     const call = (partnerId) => {
-
-//         mediaDevices.getUserMedia({ video: true, audio: true }).then(localStream => {
-//             // setLocalStream(localStream);
-//             const call = peer.call(inputRef.current, localStream);
-//             // console.log('call..', call);
-
-//             // call.on('stream', function (remoteStream) {
-//             //     console.log('[call.on(stream)]. remoteStream', remoteStream);
-//             //     setRemoteStream(remoteStream)
-//             // })  
+//     const startCall = () => {
+//         console.log(`[${USER}].startCall ran...`);
+//         mediaDevices.getUserMedia({ video: isVideoCallingMode, audio: true }).then(localStream => {
+//             setLocalStream(localStream);
+//             // console.log(`[${USER}]. name`, name);
+//             const call = PeerServices.peer.call(name, localStream);
+//             // console.log(`[${USER}]. call`, call);
+//             callObj.current = call;
+//             call.on('stream', function (remoteStream) {
+//                 setRemoteStream(remoteStream)
+//             });
+//             call.on('close', () => {
+//                 closeCall();
+//             })
 //         }).catch(err => {
 //             console.log('Failed to get local stream', err);
 //         })
 //     }
 
-
-
-
 //     useEffect(() => {
-//         // initLocalVideo()
-//         //  Local Peer ID
+//         startCall()
+//         if (callStream) {
 
-//         peer.on('open', function (id) {
-//             console.log('My peer ID is: ' + id);
-//             setpeerID(id)
+//             mediaDevices.getUserMedia({ video: isVideoCallingMode, audio: true }).then(localStream => {
+//                 setLocalStream(localStream);
+//                 callStream.answer(localStream);
+//                 callStream.on('stream', function (remoteStream) {
+//                     setRemoteStream(remoteStream)
+//                 })
+//                 callStream.on('close', () => {
+//                     // setLocalStream(null)
+//                     // setRemoteStream(null)
+//                     // Alert.alert("hy stream")
+//                     closeCall()
 
-//         });
+//                 })
 
-
-//         // peer.on('connection', function (dataConnection) {
-//         //     console.log('My peer Data Connection: ' + dataConnection);
-//         //     dataConnection.on('data', function (data) {
-//         //         // Will print 'hi! Greeting from ${parnterPeerId}'
-//         //         console.log('Data from peer connection ->', data);
-//         //     });
-//         // });
-//         peer.on('call',  (call) =>{
-//             console.log('[peer.on.call] Ran...', );
-//             mediaDevices.getUserMedia({ video: true, audio: true }).then(localStream => {
-//                 console.log('[peer.on.call]', localStream);
-//                 // setLocalStream(localStream);
-//                 // call.answer(localStream);
-//                 // call.on('stream', function (remoteStream) {
-//                 //     // console.log('[peer.on.call].stream', remoteStream, JSON.stringify(remoteStream));
-//                 //     setRemoteStream(remoteStream)
-//                 // })
 //             }).catch(err => {
 //                 console.log('Failed to get local stream', err);
 //             })
-//         });
-//         // peer.on('close', function () {
-//         //     console.log('My peer connection closed');
-//         // });
-//         // peer.on('disconnected', function () {
-//         //     console.log('My peer disconnected');
-//         // });
-//         peer.on('error', function (err) { console.log('An error accured in peer connection', err) })
-//     }, []);
 
-//     console.log("localStream=>>", localStream.toURL());
-//     console.log("remoteStream=>>", remoteStream.toURL());
-//     const inputRef = React.useRef();
+//         }
+//     }, [route.params]);
+
+
+
+
 //     return (
 //         <View style={styles.container}>
-//             <TextInput placeholder='partnerID' placeholderTextColor={"black"}
-//                 // value={peerID}
-//                 ref={inputRef}
-//                 onChangeText={value => inputRef.current = `${value}`}
-
-//                 style={{ color: "#000" }}
-//             />
-//             <Button onPress={call} title="call" />
-//             <Text style={{ color: 'black' }}>{peerID}</Text>
 //             <View style={styles.videoContainer}>
-//                 <View style={{ height: 150, width: 150, top: 10, position: 'relative', overflow: 'hidden', justifyContent: 'flex-end', alignItems: 'flex-end', alignSelf: 'flex-end', borderRadius: 75, }}>
-//                     {/* <Text>Your Video</Text> */}
-//                     <RTCView
-//                         streamURL={localStream ? localStream.toURL() : ''}
-//                         style={styles.localVideo}
-//                         objectFit={'cover'}
-//                     />
+//                 <View style={{ height: 150, width: 150, top: 0, position: 'relative', overflow: 'hidden', justifyContent: 'flex-end', alignItems: 'flex-end', alignSelf: 'flex-end', borderRadius: 75, }}>
+//                     {
+//                         !localStream?.toURL() || !isVideoCallingMode ?
+//                             <Image
+//                                 source={ImagesData.localUserPic}
+//                                 style={styles.localVideo}
+//                             />
+//                             :
+//                             <RTCView
+//                                 streamURL={localStream ? localStream.toURL() : ''}
+//                                 style={styles.localVideo}
+//                                 objectFit={'cover'}
+//                             />
+//                     }
 //                 </View>
 //                 <View style={[styles.videos, styles.remoteVideos,]}>
-//                     <RTCView
-//                         streamURL={remoteStream ? remoteStream.toURL() : ''}
-//                         style={styles.remoteVideo}
-//                         objectFit={'cover'}
+//                     {
+//                         !remoteStream?.toURL() || !isVideoCallingMode ?
+//                             <Image
+//                                 source={ImagesData.remoteUserPic}
+//                                 style={styles.remoteVideo}
+//                             />
+//                             :
+//                             <RTCView
+//                                 streamURL={remoteStream ? remoteStream.toURL() : ''}
+//                                 style={styles.remoteVideo}
+//                                 objectFit={'cover'}
+//                             />
+//                     }
+//                     <MaterialIcons
+//                         name='phone-disabled'
+//                         color={'red'}
+//                         size={40}
+//                         onPress={() => {
+//                             // console.log('[onPress].callStream', callStream)
+//                             closeCall();
+//                             // sharedDisconnectCall(hostId, navigation)
+//                             // PeerServices.peer.of(hostId)
+//                             // // const _call = getCallStream()
+//                             // console.log("get===>>", getCallStream())
+//                             // console.log('global.call', global.call)
+
+//                         }}
+//                         style={{ position: 'absolute', bottom: 10, justifyContent: 'center', alignSelf: 'center' }}
+//                     // onPress={onPress}
+
 //                     />
 //                 </View>
-//             </View>
 
+
+//             </View>
 //         </View>
 //     );
 // };
@@ -143,7 +156,6 @@
 //         backgroundColor: 'white'
 
 //     },
-
 //     videoContainer: {
 //         flex: 1,
 //         minHeight: 450,
@@ -179,3 +191,6 @@
 
 // //make this component available to the app
 // export default Camera;
+
+
+// code 100 percent work all okk with 

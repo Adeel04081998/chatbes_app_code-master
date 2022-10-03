@@ -42,7 +42,9 @@ const styles = StyleSheet.create({
         fontSize: textScale(16),
         fontFamily:fontFamily.bold,
         marginLeft:moderateScale(16),
-        textTransform:'capitalize'
+        textTransform:'capitalize',
+        color:'black'
+
     }
     
 })

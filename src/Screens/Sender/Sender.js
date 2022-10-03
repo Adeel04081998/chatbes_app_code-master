@@ -5,7 +5,7 @@ import { mediaDevices, RTCView } from 'react-native-webrtc'
 import PeerServices from '../../utils/peerService';
 import { ImagesData } from '../../config/ImagesData';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { getCallStream, sharedDisconnectCall, sharedInitialzeConnections } from '../../utils/sharedActions';
+import { getCallStream, sharedDisconnectCall, sharedInitialzeConnections, sharedInitLocalCall } from '../../utils/sharedActions';
 import navigationStrings from '../../constatns/navigationStrings';
 import socketServcies from '../../utils/socketService';
 import { CommonActions, StackActions } from '@react-navigation/native';
@@ -13,7 +13,7 @@ import { CommonActions, StackActions } from '@react-navigation/native';
 const { width, height } = Dimensions.get('screen');
 
 // create a component
-const Camera = ({ navigation, route }) => {
+const Sender = ({ navigation, route }) => {
 
     const USER = route?.params?.item?.name ?? '';
     const REMOTE_HEIGHT = height * .7;
@@ -41,7 +41,7 @@ const Camera = ({ navigation, route }) => {
         navigation.reset({
             index: 0,
             routes: [{ name: navigationStrings.CHATS }]
-       })
+        })
 
     }
     const startCall = () => {
@@ -64,24 +64,33 @@ const Camera = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        startCall()
-        if (callStream) {
+        // startCall()
+        // if (callStream) {
 
-            mediaDevices.getUserMedia({ video: isVideoCallingMode, audio: true }).then(localStream => {
-                setLocalStream(localStream);
-                callStream.answer(localStream);
-                callStream.on('stream', function (remoteStream) {
-                    setRemoteStream(remoteStream)
-                })
-                callStream.on('close', () => {
-                    closeCall()
-                })
+        //     mediaDevices.getUserMedia({ video: isVideoCallingMode, audio: true }).then(localStream => {
+        //         setLocalStream(localStream);
+        //         callStream.answer(localStream);
+        //         callStream.on('stream', function (remoteStream) {
+        //             setRemoteStream(remoteStream)
+        //         })
+        //         callStream.on('close', () => {
+        //             // setLocalStream(null)
+        //             // setRemoteStream(null)
+        //             // Alert.alert("hy stream")
+        //             closeCall()
 
-            }).catch(err => {
-                console.log('Failed to get local stream', err);
-            })
+        //         })
 
-        }
+        //     }).catch(err => {
+        //         console.log('Failed to get local stream', err);
+        //     })
+
+        // }
+
+        sharedInitLocalCall((stream) => {
+            console.log("data=>>.", stream);
+            setLocalStream(stream)
+        })
     }, [route.params]);
 
 
@@ -186,4 +195,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default Camera;
+export default Sender;

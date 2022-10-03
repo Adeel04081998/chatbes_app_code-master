@@ -17,7 +17,6 @@ const OtpVerification = ({ navigation, route }) => {
 
     const { data } = route?.params
 
-    console.log("route parms", data)
 
     const leftCustomView = () => {
         return (
@@ -36,9 +35,9 @@ const OtpVerification = ({ navigation, route }) => {
                     otp: value,
                     user_id: data._id
                 })
-                console.log("api res",res)
+                // console.log("api res", res)
             } catch (error) {
-                console.log("error riased in verify api",error)
+                // console.log("error riased in verify api", error)
                 alert(error?.message)
             }
         }
@@ -62,10 +61,11 @@ const OtpVerification = ({ navigation, route }) => {
 
             <View style={{ marginHorizontal: moderateScaleVertical(16) }}>
                 <OtpInputs
+                    placeholderTextColor={'black'}
                     placeholder='*'
                     handleChange={handleChange}
                     numberOfInputs={6}
-                    style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: moderateScaleVertical(42) }}
+                    style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: moderateScaleVertical(42),color:'black' }}
                     inputStyles={styles.inputStyle}
                 />
 

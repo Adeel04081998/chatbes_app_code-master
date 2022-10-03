@@ -1,20 +1,28 @@
+import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 
 const SOCKET_URL = "http://192.168.100.34:8191/"
 
 class WSService {
+    constructor() {
+        this.soketId = ''
 
-    initializeSocket = async () => {
+    }
+
+    initializeSocket = async (data) => {
+        const userId = data?._id
         try {
-
             this.socket = io(SOCKET_URL, {
-                transports: ['websocket']
+                transports: ['websocket'],
+                query: 'userId=' + userId
             })
-            // console.log("initializing socket", this.socket)
 
             this.socket.on('connect', (data) => {
-                console.log("=== socket connected ====")
+                this.socket.on('socket-connected', (socketId) => {
+                    this.soketId = socketId
+                })
             })
+
 
             this.socket.on('disconnect', (data) => {
                 console.log("=== socket disconnected ====")
@@ -27,6 +35,9 @@ class WSService {
         } catch (error) {
             console.log("scoket is not inialized", error)
         }
+    }
+    getSocketId() {
+        return this.soketId
     }
 
     emit(event, data = {}) {

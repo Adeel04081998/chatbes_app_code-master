@@ -1,16 +1,28 @@
 /**
  * @format
  */
-
+import { NavigationContainer } from "@react-navigation/native";
+import * as React from "react";
 import { AppRegistry } from 'react-native';
+import { Provider } from 'react-redux';
 import App from './App';
 import { name as appName } from './app.json';
-// import Peer from 'react-native-peerjs';
-// const peer = new Peer({
-//     host: '192.168.100.34',
-//     port: 9181,
-//     path: '/peer-server',
-//     debug: true
-// });
+import store from './src/reudx/store';
 
-AppRegistry.registerComponent(appName, () => App);
+
+// Text.defaultProps.style = { color: 'white' }
+
+
+const RNRedux = () => {
+    return (
+        <Provider store={store}>
+            <NavigationContainer>
+                <App />
+            </NavigationContainer>
+        </Provider>
+    )
+
+}
+
+
+AppRegistry.registerComponent(appName, () => RNRedux);

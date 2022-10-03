@@ -60,11 +60,11 @@ const PhoneNumber = ({ navigation }) => {
                 leftCustomView={leftCustomView}
                 isLeftView={true}
                 onPressRight={onDone}
-                rightTextStyle={{ 
+                rightTextStyle={{
                     color: phoneNumber.length > 8 ? colors.lightBlue : colors.grey,
-                    fontFamily:  phoneNumber.length > 8 ? fontFamily.bold : fontFamily.regular,
-                 }}
-                 rightPressActive={phoneNumber.length < 8}
+                    fontFamily: phoneNumber.length > 8 ? fontFamily.bold : fontFamily.regular,
+                }}
+                rightPressActive={phoneNumber.length < 8}
             />
             <Text style={styles.descStyle}>{strings.CHATBES_WILL_SEND}</Text>
             <HorizontalLine />
@@ -79,10 +79,11 @@ const PhoneNumber = ({ navigation }) => {
                 <Text style={styles.dialCodeStyle}>{selectedCountry?.dialCode}</Text>
                 <View style={{ flex: 1 }}>
                     <TextInput
+                        placeholderTextColor={'black'}
                         placeholder='Enter your phone number'
                         keyboardType='phone-pad'
                         style={styles.inputStyle}
-                        onChangeText={text => updateState({phoneNumber: text})}
+                        onChangeText={text => updateState({ phoneNumber: text })}
                     />
                 </View>
 

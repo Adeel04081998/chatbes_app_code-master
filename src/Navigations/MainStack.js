@@ -8,6 +8,8 @@ export default function (Stack) {
         <>
             <Stack.Screen name={navigationStrings.TAB_ROUTES} component={TabRoutes} />
             <Stack.Screen name={navigationStrings.USERS} component={Screens.Users} />
+            <Stack.Screen name={navigationStrings.SENDER} component={Screens.Sender} />
+
 
         </>
     )

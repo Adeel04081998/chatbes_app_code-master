@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet,TouchableOpacity,Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import strings from '../constatns/lang';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
@@ -12,22 +12,23 @@ const HeaderComponent = ({
     leftCustomView = () => { },
     isLeftView = false,
     containerStyle = {},
-    rightTextStyle ={},
-    onPressRight = () =>{},
+    rightTextStyle = {},
+    onPressRight = () => { },
     isRight = true,
     rightPressActive = true,
     rightImg = ''
 }) => {
     return (
         <View style={{
-          ...styles.container,
-          ...containerStyle,
+            ...styles.container,
+            ...containerStyle,
         }}>
             {isLeftView ? leftCustomView() : <View />}
+
             <Text style={styles.centerTextStyle}>{centerText}</Text>
-            {isRight ?<TouchableOpacity  disabled={rightPressActive} onPress={onPressRight}>
-                {rightImg ? <Image source={rightImg} />:<Text style={{...styles.rightTextStyle, ...rightTextStyle}}>{rightText}</Text>}
-            </TouchableOpacity>: <View />}
+            {isRight ? <TouchableOpacity disabled={rightPressActive} onPress={onPressRight} style={{ marginTop: 25 }}>
+                {rightImg ? <Image source={rightImg} /> : <Text style={{ ...styles.rightTextStyle, ...rightTextStyle }}>{rightText}</Text>}
+            </TouchableOpacity> : <View />}
         </View>
     );
 };
@@ -41,17 +42,23 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.6,
         borderColor: 'grey',
         paddingBottom: 12,
-        paddingHorizontal: 12
+        // paddingHorizontal: 12,
+        alignContent: 'center',
+        borderWidth: 1
+
     },
     centerTextStyle: {
         color: colors.black,
-        fontFamily:fontFamily.bold,
-        fontSize: 24
+        fontFamily: fontFamily.bold,
+        fontSize: 24,
+        alignSelf: 'flex-end',
+
     },
     rightTextStyle: {
         color: colors.grey,
-        fontFamily:fontFamily.regular,
-        fontSize: 18
+        fontFamily: fontFamily.regular,
+        fontSize: 18,
+
     }
 });
 
