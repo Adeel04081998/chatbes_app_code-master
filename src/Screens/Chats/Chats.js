@@ -3,19 +3,12 @@ import React, { Component, useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 import HeaderComponent from '../../Components/HeaderComponent';
-import HorizontalLine from '../../Components/HorizontalLine';
 import WrapperContainer from '../../Components/WrapperContainer';
 import imagePath from '../../constatns/imagePath';
 import strings from '../../constatns/lang';
 import navigationStrings from '../../constatns/navigationStrings';
-import { saveUserData } from '../../reudx/reducers/auth';
-import store from '../../reudx/store';
 import colors from '../../styles/colors';
-import fontFamily from '../../styles/fontFamily';
-import { moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize';
-import PeerServices from '../../utils/peerService';
-import { getCallStream, setCallStream, sharedCallAnswer, sharedDisconnectCall, sharedInitialzeConnections } from '../../utils/sharedActions';
-import { clearAllItem } from '../../utils/utils';
+import {  moderateScaleVertical,  } from '../../styles/responsiveSize';
 import styles from './styles';
 
 
@@ -27,17 +20,8 @@ const Chats = ({ navigation, route }) => {
     const [data, setData] = useState([])
     const userData = useSelector(state => state.auth)
     const userName = userData?.userData?.name ?? ''
-    const isRejectCallCase = route?.params?.isCallEndFlow ??'';
+    const isRejectCallCase = route?.params?.isCallEndFlow ?? '';
 
-    useEffect(() => {
-        console.log("useEffect chat ");
-        if (isRejectCallCase) {
-            console.log("isRejectCallCase use efect chat if");
-            sharedInitialzeConnections()
-        }
-
-
-    }, [isRejectCallCase])
     const leftCustomView = () => {
         return <TouchableOpacity style={{ alignSelf: 'center', alignItems: 'center' }}>
             {data.length > 0 ? <Text>Edit</Text> : <View style={{ height: 20 }} />}
@@ -85,18 +69,7 @@ const Chats = ({ navigation, route }) => {
                 rightImg={imagePath.icEdit}
                 onPressRight={onPressRight}
             />
-            <TouchableOpacity style={{ height: 50, width: '50%', backgroundColor: 'red', justifyContent: 'center', left: 40 }}
-                onPress={async () => {
-                    // let userData = await getItem('userData')
-                    // await clearAllItem()
-                    // store.dispatch(saveUserData(''))
-                    // setCallStream("Adeel")
-                    navigation.navigate(navigationStrings.SENDER,{})
-                }}
-            >
-                <Text>LogOut</Text>
-            </TouchableOpacity>
-            <Text style={{ color: 'black', fontSize: 16, margin: 20, borderWidth: 2 }}>{PeerServices.peerId}</Text>
+           
             <FlatList
                 data={data}
                 renderItem={renderItem}

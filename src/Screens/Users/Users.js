@@ -11,7 +11,7 @@ import strings from '../../constatns/lang';
 import navigationStrings from '../../constatns/navigationStrings';
 import actions from '../../reudx/actions';
 import colors from '../../styles/colors';
-import { getCallStream, sharedUniqueKeyGenerator } from '../../utils/sharedActions';
+import {  sharedUniqueKeyGenerator } from '../../utils/sharedActions';
 import socketServcies from '../../utils/socketService';
 import styles from './styles';
 
@@ -60,16 +60,8 @@ const Users = ({ navigation }) => {
                     iconsData.map((x, i) => {
                         return (
                             <TouchableOpacity onPress={() => {
-                                socketServcies.emit('call_config', {
-                                    callingMode: x
-                                })
-                                navigation.navigate(x.navigationPath, {
-                                    item: item,
-                                    // actionType: x.name,
-                                    // isVideo:x.name === 'videoC'
-                                    callingMode: x.CallingMode
-
-                                })
+                                socketServcies.emit('call_config', { callingMode: x })
+                                navigation.navigate(x.navigationPath, { item: item, callingMode: x.CallingMode })
                             }} key={sharedUniqueKeyGenerator()}>
                                 <Image source={x.icon} style={{ height: 30, width: 30, tintColor: colors.blue }} />
                             </TouchableOpacity>
