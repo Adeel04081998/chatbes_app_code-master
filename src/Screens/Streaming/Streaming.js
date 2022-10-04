@@ -4,11 +4,12 @@ import { View, Text, StyleSheet, Dimensions, Image, } from 'react-native';
 import { RTCView } from 'react-native-webrtc'
 import { ImagesData } from '../../config/ImagesData';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import socketServcies from '../../utils/socketService';
 const { width, height } = Dimensions.get('screen');
 const REMOTE_HEIGHT = height * .7;
 const Top = REMOTE_HEIGHT * 0.2;
 
-const Camera = (props) => {
+const Streaming = (props) => {
     // console.log("__[Camera]__ PROPS ", props);
     if (!props.localStreaming) return;
 
@@ -16,6 +17,7 @@ const Camera = (props) => {
     const localStream = props?.localStreaming ?? null;
     const remoteStream = props?.remoteStreaming ?? null;
     const isVideoCallingMode = props?.isVideoCallingMode ?? null
+    const SenderSocketId = props?.SenderSocketId ?? null
     //  state & const & ref  section END  here
 
     //  Component Scope  section START from here
@@ -61,10 +63,12 @@ const Camera = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.videoContainer}>
+                <Text>SenderSocketId ={SenderSocketId}</Text>
                 {localStream || isVideoCallingMode ? <Local /> : <RenderUserImage path={ImagesData.localUserPic} mianContainerStyl={styles.localVideos} imageStyl={styles.localVideo} />}
                 {remoteStream || isVideoCallingMode ? <Remote /> : <RenderUserImage path={ImagesData.remoteUserPic} mianContainerStyl={styles.userPicContainer} imageStyl={styles.remoteVideo} />}
-                {/* {!localStream || !isVideoCallingMode ? <RenderUserImage path={ImagesData.localUserPic} styleLocalStream={styles.localVideos} /> : <Local />}
-                {!remoteStream || !isVideoCallingMode ? <RenderUserImage path={ImagesData.remoteUserPic} /> : <Remote />} */}
+
+                {/* {!localStream || !isVideoCallingMode ? <RenderUserImage path={ImagesData.localUserPic} mianContainerStyl={styles.localVideos} imageStyl={styles.localVideo} /> : <Local />}
+                {!remoteStream || !isVideoCallingMode ? <RenderUserImage path={ImagesData.remoteUserPic} mianContainerStyl={styles.userPicContainer} imageStyl={styles.remoteVideo} /> : <Remote />} */}
             </View>
         </View>
     );
@@ -126,4 +130,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default Camera;
+export default Streaming;

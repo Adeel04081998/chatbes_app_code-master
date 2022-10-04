@@ -6,9 +6,6 @@ import socketServcies from './socketService';
 import { mediaDevices } from 'react-native-webrtc';
 import { Alert } from 'react-native';
 var call = null
-
-
-
 export const sharedUniqueKeyGenerator = (randomNumber = 1000) => {
     return Math.floor(Math.random() * randomNumber) + new Date().getTime()
 }
@@ -27,15 +24,8 @@ export const sharedOpenCamera = () => {
 export const sharedInitialzeConnections = (endCallCase, cb) => {
     // console.log("end call case", endCallCase);
     const user = store.getState().auth.userData
-    if (endCallCase === true) {
-        // console.log("sharedInitialzeConnections if===>");
-        PeerServices.initializePeer(user, cb)
-
-    } else {
-        // console.log("sharedInitialzeConnections else===>");
-        PeerServices.initializePeer(user)
-        socketServcies.initializeSocket(user)
-    }
+    PeerServices.initializePeer(user)
+    socketServcies.initializeSocket(user)
 
 }
 
@@ -47,3 +37,4 @@ export const sharedInitLocalCall = (isVideoCall, cb) => {
         console.log('Failed to get local stream [ERR]', err);
     })
 }
+

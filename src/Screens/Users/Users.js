@@ -1,6 +1,7 @@
 //import liraries
 import React, { useEffect, useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
+import { useSelector } from 'react-redux';
 import HeaderComponent from '../../Components/HeaderComponent';
 import HorizontalLine from '../../Components/HorizontalLine';
 import RoundImage from '../../Components/RoundImage';
@@ -11,66 +12,70 @@ import strings from '../../constatns/lang';
 import navigationStrings from '../../constatns/navigationStrings';
 import actions from '../../reudx/actions';
 import colors from '../../styles/colors';
-import {  sharedUniqueKeyGenerator } from '../../utils/sharedActions';
+import { sharedUniqueKeyGenerator } from '../../utils/sharedActions';
 import socketServcies from '../../utils/socketService';
 import styles from './styles';
 
 
-
+var senderObj = {}
 const Users = ({ navigation }) => {
+    let userDataRedux = useSelector(state => state.auth)
 
-    const [data, setData] = useState([])
+    const [state, setState] = useState({ usersList: [] })
+
 
     useEffect(() => {
         fetchData()
     }, [])
 
+
     const fetchData = async () => {
         try {
             const res = await actions.fetchUsers()
             if (!!res?.data) {
-                setData(res.data.users)
+                setState((pre) => ({ ...pre, usersList: res.data.users }))
             }
         } catch (error) {
             console.log("error raised during fetch user", error)
         }
     }
-
-
-
     const onPressRight = () => {
         navigation.goBack()
     }
-
     const onPressItem = useCallback((item) => {
 
     }, [])
 
-
+    // console.log("spocket id user .js[]=>>.", socketServcies.getSocketId());
     const renderItem = useCallback(({ item, index }) => {
-        return (
-            <TouchableOpacity onPress={() => onPressItem(item)} activeOpacity={0.7} style={[styles.headerStyle, { justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }]}>
-                <RoundImage
-                    image={item?.profileImage}
-                    size={40}
-                />
-                <Text style={styles.userName}>{item?.name}</Text>
-                <Text style={{ fontWeight: 'bold', marginHorizontal: 10, color: 'black' }}>{item?.peerID}</Text>
-                {
-                    iconsData.map((x, i) => {
-                        return (
-                            <TouchableOpacity onPress={() => {
-                                socketServcies.emit('call_config', { callingMode: x })
-                                navigation.navigate(x.navigationPath, { item: item, callingMode: x.CallingMode })
-                            }} key={sharedUniqueKeyGenerator()}>
-                                <Image source={x.icon} style={{ height: 30, width: 30, tintColor: colors.blue }} />
-                            </TouchableOpacity>
-                        )
-                    })
-                }
-            </TouchableOpacity>
-        )
-    }, [data])
+        if (item?._id !== userDataRedux.userData._id) {
+            return (
+                <TouchableOpacity onPress={() => onPressItem(item)} activeOpacity={0.7} style={[styles.headerStyle, { justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }]}>
+                    <RoundImage
+                        image={item?.profileImage}
+                        size={40}
+                    />
+                    <Text style={styles.userName}>{item?.name}</Text>
+                    <Text style={{ fontWeight: 'bold', marginHorizontal: 10, color: 'black' }}>{item?.peerID}</Text>
+                    {
+                        iconsData.map((x, i) => {
+                            return (
+                                <TouchableOpacity onPress={() => {
+                                    var callerObj = state.usersList.find((element) => { return element._id === userDataRedux.userData._id; });
+                                    socketServcies.emit('call_config', { callingMode: x, })
+                                    socketServcies.emit('sender_caller', { caller: callerObj, receiver: item })
+                                    navigation.navigate(x.navigationPath, { item: item, callingMode: x.CallingMode, })
+                                }} key={sharedUniqueKeyGenerator()}>
+                                    <Image source={x.icon} style={{ height: 30, width: 30, tintColor: colors.blue }} />
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </TouchableOpacity>
+            )
+        }
+
+    }, [state.usersList])
 
     const listEmptyComponent = useCallback(() => {
         return (
@@ -78,7 +83,7 @@ const Users = ({ navigation }) => {
                 <Text>No User Found</Text>
             </View>
         )
-    }, [data])
+    }, [state.usersList])
 
     const listHeaderComponent = useCallback(() => {
         return (
@@ -92,7 +97,8 @@ const Users = ({ navigation }) => {
 
             </View>
         )
-    }, [data])
+    }, [state.usersList])
+
     return (
         <WrapperContainer
             containerStyle={{ paddingHorizontal: 0 }}
@@ -105,10 +111,8 @@ const Users = ({ navigation }) => {
                 rightTextStyle={{ color: colors.lightBlue }}
                 onPressRight={onPressRight}
             />
-
-
             <FlatList
-                data={data}
+                data={state.usersList}
                 renderItem={renderItem}
                 ListEmptyComponent={listEmptyComponent}
                 contentContainerStyle={{ flexGrow: 1 }}

@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 
@@ -18,7 +19,10 @@ class WSService {
             })
 
             this.socket.on('connect', (data) => {
+                // Alert.alert("connect[]")
+
                 this.socket.on('socket-connected', (socketId) => {
+                    // Alert.alert("socketId[]",socketId)
                     this.soketId = socketId
                 })
             })
@@ -51,6 +55,7 @@ class WSService {
     removeListener(listenerName) {
         this.socket.removeListener(listenerName)
     }
+
 
 }
 

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Alert, Platform } from 'react-native';
 import navigationStrings from '../../constatns/navigationStrings';
 import { sharedInitLocalCall } from '../../utils/sharedActions';
-import Camera from '../Camera/Camera';
+import Streaming from '../Streaming/Streaming';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -45,7 +45,7 @@ const Receiver = ({ navigation, route }) => {
     //  UseEffect section END  here
 
     return (
-        <Camera
+        <Streaming
             localStreaming={localStream}
             remoteStreaming={remoteStream}
             onCloseCallHandler={() => { endCallHandler() }}

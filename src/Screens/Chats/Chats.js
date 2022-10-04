@@ -8,7 +8,8 @@ import imagePath from '../../constatns/imagePath';
 import strings from '../../constatns/lang';
 import navigationStrings from '../../constatns/navigationStrings';
 import colors from '../../styles/colors';
-import {  moderateScaleVertical,  } from '../../styles/responsiveSize';
+import { moderateScaleVertical, } from '../../styles/responsiveSize';
+import socketServcies from '../../utils/socketService';
 import styles from './styles';
 
 
@@ -69,7 +70,9 @@ const Chats = ({ navigation, route }) => {
                 rightImg={imagePath.icEdit}
                 onPressRight={onPressRight}
             />
-           
+            <Text style={{ color:'black'}}>{socketServcies.getSocketId()}</Text>
+
+
             <FlatList
                 data={data}
                 renderItem={renderItem}
@@ -77,7 +80,6 @@ const Chats = ({ navigation, route }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
 
             />
-
 
 
         </WrapperContainer>

@@ -1,7 +1,7 @@
 //Bottom Tabs Screen
 export { default as Status } from './Status/Status';
 export { default as Calls } from './Calls/Calls';
-export { default as Camera } from './Camera/Camera';
+export { default as Streaming } from './Streaming/Streaming'
 export { default as Chats } from './Chats/Chats';
 export { default as Settings } from './Settings/Settings';
 export { default as Caller } from './Caller/Caller';

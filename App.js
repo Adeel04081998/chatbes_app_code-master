@@ -11,7 +11,7 @@ import PeerServices from './src/utils/peerService';
 import Model from './src/Components/Model';
 import { useNavigation } from '@react-navigation/native';
 import navigationStrings from './src/constatns/navigationStrings';
-import { sharedInitialzeConnections, _callRef } from './src/utils/sharedActions';
+import { getSenderSocketId, sharedInitialzeConnections, _callRef } from './src/utils/sharedActions';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -23,7 +23,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Caller, Camera } from './src/Screens';
 
 AntDesign.loadFont();
 Entypo.loadFont();
@@ -45,6 +44,7 @@ const App = ({ navigation }) => {
   const [CallMode, setCallMOde] = useState()
   const nav = useNavigation()
   let userDataRedux = useSelector(state => state.auth)
+  const userId = userDataRedux.userData._id ?? null
   //  state & const & ref  section END  here
 
   //  UseEffect section START from here
@@ -77,14 +77,18 @@ const App = ({ navigation }) => {
 
   const rejectCallHandler = () => {
     if (callStream.close) {
-      callStream.close();
+      socketServcies.emit('call_declined', {
+        userId: userId,
+        socketId: socketServcies.getSocketId(),
+        peerId: PeerServices.getPeerId(),
+      })
       setShowModal(false)
     }
   }
   const acceptCallHandler = () => {
     nav.navigate(navigationStrings.RECEIVER, {
       callStreaming: callStream,
-      callingMode: CallMode.CallingMode
+      callingMode: CallMode?.CallingMode
     })
     setShowModal(false)
   }
@@ -92,13 +96,12 @@ const App = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <Routes />
+      <Routes />
       {showModal && <Model
         onAcceptCall={() => { acceptCallHandler() }}
         onRejectCall={() => { rejectCallHandler() }}
       />
-      } */}
-      <Camera />
+      }
     </View>
 
   );

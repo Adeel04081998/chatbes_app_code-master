@@ -31,11 +31,9 @@ export default function TabRoutes() {
                 }}
             />
             <Tab.Screen
-                name={navigationStrings.CAMERA}
+                name={navigationStrings.STREAMING}
                 // component={Screens.Camera}
                 component={Screens.Caller}
-
-
                 options={{
                     tabBarIcon: ({ focused }) => {
                         return <Image style={{ tintColor: focused ? 'blue' : 'black', height: 20, width: 25 }} source={imagePath.icVideo} />

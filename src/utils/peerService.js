@@ -9,10 +9,12 @@ const SOCKET_URL = "http://192.168.100.34:8191/"
 class PeerSolutions {
     constructor() {
         this.peerId = ''
+        this.userId = ''
 
     }
-    initializePeer = async (data,cb) => {
-        const userId = data?._id ?? ''
+    initializePeer = async (data, cb) => {
+        // const userId = data?._id ?? ''
+        this.userId = data?._id ?? ''
         try {
             this.peer = new Peer(undefined, {
                 host: '192.168.100.34',
@@ -25,7 +27,7 @@ class PeerSolutions {
                 console.log('My peer ID is: ', peerId);
                 this.peerId = peerId;
                 socketServcies.emit('peer-user', {
-                    userId: userId,
+                    userId: this.userId,
                     socketId: socketServcies.getSocketId(),
                     peerId: peerId
                 })
@@ -51,6 +53,14 @@ class PeerSolutions {
     Peeron(event, cb) {
         this.peer.on(event, cb)
     }
+    // emitEventWithAllData(event, peerId = this.peerId) {
+    //     socketServcies.emit(event, {
+    //         userId: this.userId,
+    //         socketId: socketServcies.getSocketId(),
+    //         peerId: peerId
+    //     })
+
+    // }
 
 
 }
