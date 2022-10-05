@@ -1,6 +1,6 @@
 //import liraries
 import React, { useEffect, useCallback, useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import HeaderComponent from '../../Components/HeaderComponent';
 import HorizontalLine from '../../Components/HorizontalLine';
@@ -22,8 +22,6 @@ const Users = ({ navigation }) => {
     let userDataRedux = useSelector(state => state.auth)
 
     const [state, setState] = useState({ usersList: [] })
-
-
     useEffect(() => {
         fetchData()
     }, [])
@@ -39,14 +37,14 @@ const Users = ({ navigation }) => {
             console.log("error raised during fetch user", error)
         }
     }
-    const onPressRight = () => {
-        navigation.goBack()
-    }
-    const onPressItem = useCallback((item) => {
-
+    const onPressRight = () => { navigation.goBack() }
+    const onPressCallingMode = useCallback(({ x, item }) => {
+        var callerObj = state.usersList.find((element) => { return element._id === userDataRedux.userData._id; });
+        socketServcies.emit('call_config', { callingMode: x, })
+        socketServcies.emit('sender_caller', { caller: callerObj, receiver: item })
+        navigation.navigate(x.navigationPath, { item: item, callingMode: x.CallingMode, })
     }, [])
 
-    // console.log("spocket id user .js[]=>>.", socketServcies.getSocketId());
     const renderItem = useCallback(({ item, index }) => {
         if (item?._id !== userDataRedux.userData._id) {
             return (
@@ -56,16 +54,13 @@ const Users = ({ navigation }) => {
                         size={40}
                     />
                     <Text style={styles.userName}>{item?.name}</Text>
-                    <Text style={{ fontWeight: 'bold', marginHorizontal: 10, color: 'black' }}>{item?.peerID}</Text>
+                    {/* <Text style={{ fontWeight: 'bold', marginHorizontal: 10, color: 'black' }}>{item?.peerID}</Text> */}
                     {
                         iconsData.map((x, i) => {
                             return (
-                                <TouchableOpacity onPress={() => {
-                                    var callerObj = state.usersList.find((element) => { return element._id === userDataRedux.userData._id; });
-                                    socketServcies.emit('call_config', { callingMode: x, })
-                                    socketServcies.emit('sender_caller', { caller: callerObj, receiver: item })
-                                    navigation.navigate(x.navigationPath, { item: item, callingMode: x.CallingMode, })
-                                }} key={sharedUniqueKeyGenerator()}>
+                                <TouchableOpacity
+                                    onPress={() => { onPressCallingMode({ x, item }) }}
+                                    key={sharedUniqueKeyGenerator()}>
                                     <Image source={x.icon} style={{ height: 30, width: 30, tintColor: colors.blue }} />
                                 </TouchableOpacity>
                             )

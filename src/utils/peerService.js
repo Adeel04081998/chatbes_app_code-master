@@ -4,8 +4,6 @@ import io from 'socket.io-client';
 import navigationStrings from '../constatns/navigationStrings';
 import socketServcies from './socketService';
 
-const SOCKET_URL = "http://192.168.100.34:8191/"
-
 class PeerSolutions {
     constructor() {
         this.peerId = ''
@@ -16,13 +14,14 @@ class PeerSolutions {
         // const userId = data?._id ?? ''
         this.userId = data?._id ?? ''
         try {
-            this.peer = new Peer(undefined, {
-                host: '192.168.100.34',
-                secure: false,
-                port: 9181,
-                path: '/peer-server',
-                debug: true
-            });
+            // this.peer = new Peer(undefined, {
+            //     host: '192.168.100.34',
+            //     secure: false,
+            //     port: 9181,
+            //     path: '/peer-server',
+            //     debug: true
+            // });
+            this.peer = new Peer();
             this.peer.on('open', (peerId,) => {
                 console.log('My peer ID is: ', peerId);
                 this.peerId = peerId;

@@ -22,11 +22,9 @@ export const sharedOpenCamera = () => {
 // Initiate Connections
 
 export const sharedInitialzeConnections = (endCallCase, cb) => {
-    // console.log("end call case", endCallCase);
     const user = store.getState().auth.userData
     PeerServices.initializePeer(user)
     socketServcies.initializeSocket(user)
-
 }
 
 // Initiate local Video Streaming

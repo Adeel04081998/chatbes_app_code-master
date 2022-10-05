@@ -47,7 +47,7 @@ const Caller = ({ navigation, route }) => {
                 initiateCallToReceiver(stream, (remoteStreaming) => { setRemoteStream(remoteStreaming) })
             })
         } else {
-            Alert.alert("Enter Receiver ID First !!")
+            // Alert.alert("Enter Receiver ID First !!")
             navigation.navigate(navigationStrings.USERS, {})
         }
 

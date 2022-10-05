@@ -12,4 +12,4 @@ export default  {
     icVideo: require('../assets/images/ic_video.png'),
     icPlus: require('../assets/images/ic_plus.png'),
     icBigLight: require("../assets/images/ic_lightbg.png")
-}
+} 

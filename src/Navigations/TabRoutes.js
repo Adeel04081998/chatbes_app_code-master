@@ -10,8 +10,7 @@ const Tab = createBottomTabNavigator();
 
 export default function TabRoutes() {
     return (
-
-        <Tab.Navigator screenOptions={{ headerShown: false }} initialRouteName={navigationStrings.CHATS}>
+        <Tab.Navigator screenOptions={{ headerShown: false }} initialRouteName={navigationStrings.STATUS}>
             <Tab.Screen
                 name={navigationStrings.STATUS}
                 component={Screens.Status}
@@ -22,8 +21,10 @@ export default function TabRoutes() {
                 }}
             />
             <Tab.Screen
-                name={navigationStrings.CALLS}
-                component={Screens.Calls}
+                // name={navigationStrings.CALLS}
+                // component={Screens.Calls}
+                name={navigationStrings.USERS}
+                component={Screens.Users}
                 options={{
                     tabBarIcon: ({ focused }) => {
                         return <Image style={{ tintColor: focused ? 'blue' : 'black' }} source={imagePath.icCalls} />

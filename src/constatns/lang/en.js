@@ -20,6 +20,7 @@ export default {
     IN_THE_TOP_RIGHT_:"Int the top right corner to start a new chat.",
     YOU_CAN_CHAT_WITH_CONTACTS:"You can chat with contacts who have Chatbes installed and signup on their phone.",
     CHATS:"Chats",
+    STATUS:"Status",
     CANCEL:"Cancel",
     NEW_CHAT:"New Chat",
     SEARCH:"Search",

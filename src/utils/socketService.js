@@ -1,28 +1,29 @@
 import { Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
+import { SOCKET_BASE_URL } from '../config/urls';
 
-const SOCKET_URL = "http://192.168.100.34:8191/"
+// const SOCKET_URL = "http://192.168.100.34:8191/"
+
+const SOCKET_URL = "https://cibaksocketio.herokuapp.com/"
 
 class WSService {
     constructor() {
         this.soketId = ''
-
     }
 
     initializeSocket = async (data) => {
         const userId = data?._id
         try {
-            this.socket = io(SOCKET_URL, {
+            this.socket = io(SOCKET_BASE_URL, {
                 transports: ['websocket'],
                 query: 'userId=' + userId
             })
 
             this.socket.on('connect', (data) => {
-                // Alert.alert("connect[]")
-
+                console.log("socket connect");
                 this.socket.on('socket-connected', (socketId) => {
-                    // Alert.alert("socketId[]",socketId)
+                    console.log("socket connected", socketId);
                     this.soketId = socketId
                 })
             })
